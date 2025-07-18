@@ -146,7 +146,7 @@ class TensorParallelAPITests(DTensorTestBase):
         model_tp = deepcopy(model)
 
         # parallelize model_tp
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         model_tp = parallelize_module(model_tp, device_mesh, rowwise)
 
         # let each rank generate unique local input
@@ -164,7 +164,7 @@ class TensorParallelAPITests(DTensorTestBase):
         model_tp = deepcopy(model)
 
         # parallelize model_tp
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         model_tp = parallelize_module(model_tp, device_mesh, colwise)
 
         self._compare_module(model, model_tp, inp_size)
@@ -172,7 +172,7 @@ class TensorParallelAPITests(DTensorTestBase):
     @with_comms
     def test_prepare_module_input(self):
         module = DummyModule()
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         parallelize_module(
             module,
             device_mesh,
@@ -187,7 +187,7 @@ class TensorParallelAPITests(DTensorTestBase):
     @with_comms
     def test_prepare_module_output(self):
         module = DummyModule()
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         parallelize_module(
             module,
             device_mesh,
@@ -205,7 +205,7 @@ class TensorParallelAPITests(DTensorTestBase):
     @with_comms
     def test_prepare_module_input_output(self):
         module = DummyModule()
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         parallelize_module(
             module,
             device_mesh,
@@ -386,7 +386,7 @@ class TensorParallelAPITests(DTensorTestBase):
         model_tp = deepcopy(model)
 
         # Call parallelize_module under DeviceMesh context.
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         with device_mesh:
             model_tp = parallelize_module(model_tp, parallelize_plan=colwise)
 
@@ -399,7 +399,7 @@ class TensorParallelAPITests(DTensorTestBase):
 
         # Call parallelize_module with empty plan.
         # Goal is not to crash.
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         with self.assertWarns(UserWarning):
             parallelize_module(model, device_mesh)
 

@@ -465,7 +465,7 @@ class DistTensorParallelExampleTest(DTensorTestBase):
             "embedding": ColwiseParallel(),
             "fc": RowwiseParallel(),
         }
-        device_mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
+        device_mesh = self.build_device_mesh()
         parallelize_module(model, device_mesh, parallelize_plan)
 
         input_size = [5]
