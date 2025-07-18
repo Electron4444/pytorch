@@ -91,7 +91,7 @@ class TestCommMode(TestCase):
         self.assertEqual(comm_counts[c10d_functional.reduce_scatter_tensor], 1)
 
     def test_comm_mode_with_dtensor(self):
-        mesh = self.build_device_mesh()
+        mesh = DeviceMesh(self.device_type, list(range(self.world_size)))
 
         def f(x, y):
             return torch.mm(x, y)
